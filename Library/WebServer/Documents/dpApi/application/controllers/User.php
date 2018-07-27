@@ -7,7 +7,7 @@ class User extends CI_Controller {
         
         $this->load->model('user_model');
         $this->load->library('session');
-        
+        $this->load->library('encryption');
       }
     public function index()
 	{
@@ -30,7 +30,7 @@ class User extends CI_Controller {
            
             $dataArray['username'] = $_POST['username'];
             $dataArray['email'] = $_POST['email'];
-            $dataArray['password'] = $_POST['password'];
+            $dataArray['password'] = $this->encryption->encrypt($_POST['password']);
             $dataArray['pin'] = $_POST['pin'];
             $dataArray['company'] = $_POST['company'];
             $dataArray['created_date'] = date("Y-m-d H:i:s");
@@ -47,7 +47,13 @@ class User extends CI_Controller {
     }
     public function test(){
          $memberIdMax = $this->user_model->getMaxRow('users','member_id');
-         print_r($memberIdMax);
+        // print_r($memberIdMax);
+
+         $plain_text = 'This is a plain-text message!';
+echo $ciphertext = $this->encryption->encrypt($plain_text);
+echo "<br>";
+// Outputs: This is a plain-text message!
+echo $this->encryption->decrypt($ciphertext);
     }
     function RandomString($length = 32) {
         $randstr="";
